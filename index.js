@@ -126,14 +126,13 @@ function updateKeyboard() {
 
 function getCorrectWord() {
     var request = new XMLHttpRequest();
-    request.open('GET', 'https://raw.githubusercontent.com/JEPPSER/ordle/master/word.txt', true);
+    request.open('GET', 'https://raw.githubusercontent.com/JEPPSER/ordle/main/word.txt', true);
     request.send(null);
     request.onreadystatechange = function () {
         if (request.readyState === 4 && request.status === 200) {
             var type = request.getResponseHeader('Content-Type');
             if (type.indexOf("text") !== 1) {
                 correctWord = request.responseText;
-                console.log(correctWord);
                 return request.responseText;
             }
         }
