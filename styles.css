@@ -1,0 +1,35 @@
+.grid-container {
+  display: flex;
+  margin-bottom: 3px;
+  font-variant: all-petite-caps;
+}
+
+.grid-item {
+    font-family: Arial, Helvetica, sans-serif;
+    border-radius: 5px;
+    margin-right: 3px;
+    width: 40px;
+    height: 50px;
+    text-align: center;
+    background-color: #e5e5e5;
+}
+
+.answer-box {
+    font-family: Arial, Helvetica, sans-serif;
+    width: 50px;
+    height: 50px;
+    text-align: center;
+    border: solid 2px #ccc;
+    margin-right: 3px;
+}
+
+.answers {
+    position: absolute;
+    left: 100px;
+    top: 100px;
+}
+
+.keyboard {
+    bottom: 10px;
+    position: absolute;
+}
