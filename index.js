@@ -1,5 +1,6 @@
+allWords = [];
+getAllWords();
 let correctWord = '';
-getCorrectWord();
 
 // States: white, gray, yellow, green.
 let letters = [
@@ -64,7 +65,7 @@ function click(letter) {
                 word += p.innerText;
             });
 
-            if (words.findIndex(a => a == word) == -1) {
+            if (allWords.findIndex(a => a == word) == -1 && words.findIndex(a => a == word) == -1) {
                 alert('Not a word!');
             } else {
                 for (let i in word) {
@@ -103,9 +104,6 @@ function click(letter) {
     }
 }
 
-let words = [];
-getText();
-
 function updateKeyboard() {
     for (let key of keyboard) {
         let val = key.querySelector('p').innerText;
@@ -124,22 +122,7 @@ function updateKeyboard() {
     }
 }
 
-function getCorrectWord() {
-    var request = new XMLHttpRequest();
-    request.open('GET', 'https://raw.githubusercontent.com/JEPPSER/ordle/main/word.txt', true);
-    request.send(null);
-    request.onreadystatechange = function () {
-        if (request.readyState === 4 && request.status === 200) {
-            var type = request.getResponseHeader('Content-Type');
-            if (type.indexOf("text") !== 1) {
-                correctWord = request.responseText;
-                return request.responseText;
-            }
-        }
-    }
-}
-
-function getText(){
+function getAllWords(){
     // read text from URL location
     var request = new XMLHttpRequest();
     request.open('GET', 'https://raw.githubusercontent.com/almgru/svenska-ord.txt/master/svenska-ord.txt', true);
@@ -149,9 +132,64 @@ function getText(){
             var type = request.getResponseHeader('Content-Type');
             if (type.indexOf("text") !== 1) {
                 let arr = request.responseText.split('\n');
-                words = arr.filter(a => a.length == 5);
+                allWords = arr.filter(a => a.length == 5);
+                words = words.filter(w => allWords.findIndex(a => a == w) != -1);
+                generateCorrectWord();
                 return request.responseText;
             }
         }
     }
+}
+
+function reset() {
+    letters = [
+        { letter: 'q', state: 'white' },
+        { letter: 'w', state: 'white' },
+        { letter: 'e', state: 'white' },
+        { letter: 'r', state: 'white' },
+        { letter: 't', state: 'white' },
+        { letter: 'y', state: 'white' },
+        { letter: 'u', state: 'white' },
+        { letter: 'i', state: 'white' },
+        { letter: 'o', state: 'white' },
+        { letter: 'p', state: 'white' },
+        { letter: 'å', state: 'white' },
+        { letter: 'a', state: 'white' },
+        { letter: 's', state: 'white' },
+        { letter: 'd', state: 'white' },
+        { letter: 'f', state: 'white' },
+        { letter: 'g', state: 'white' },
+        { letter: 'h', state: 'white' },
+        { letter: 'j', state: 'white' },
+        { letter: 'k', state: 'white' },
+        { letter: 'l', state: 'white' },
+        { letter: 'ö', state: 'white' },
+        { letter: 'ä', state: 'white' },
+        { letter: 'z', state: 'white' },
+        { letter: 'x', state: 'white' },
+        { letter: 'c', state: 'white' },
+        { letter: 'v', state: 'white' },
+        { letter: 'b', state: 'white' },
+        { letter: 'n', state: 'white' },
+        { letter: 'm', state: 'white' }
+    ];
+    updateKeyboard();
+    letterIndex = 0;
+    answerCount = 0;
+    let boxes = document.querySelectorAll('.answer-box');
+    for (let box of boxes) {
+        box.style = null;
+        let p = box.querySelector('p');
+        p.innerText = null;
+    }
+
+    generateCorrectWord();
+}
+
+function generateCorrectWord() {
+    let seedInput = document.querySelector('#seed');
+    let seed = parseInt(seedInput.value > 0 ? seedInput.value : 1);
+    let date = new Date();
+    let index = (1 + date.getDate()) * (1 + date.getMonth()) * (1 + date.getDay()) * (1 + date.getHours()) * seed;
+    correctWord = words[index % words.length];
 }
